@@ -1,21 +1,19 @@
-# `template-react-esbuild` on GitHub Actions
+## Your repository is almost ready
 
-Set up a new repo with latest version of [`react`](https://reactjs.org/) and [`esbuild`](https://esbuild.github.io/) installed. Also deploy to GitHub Pages on every commit.
+There are few more steps to enable GitHub Pages and continuous deployment.
 
-## Background
+1. Enable GitHub Pages
+   1. Navigate to [Pages settings](../../settings/pages)
+   1. In the "Source" field, select "GitHub Actions"
+1. Trigger the deployment
+   1. [Modify and commit `App.tsx` to main](../../edit/main/src/ui/App.tsx)
+   1. Check deployment workflow at [![Deploy static content to Pages](../../actions/workflows/static.yml/badge.svg)](../../actions/workflows/static.yml)
 
-We want to quickly build a very simple React app as a static website using [`esbuild`](https://esbuild.github.io/) and hosted on GitHub Pages:
+### GitHub Codespaces
 
-- [x] Static website
-- [x] TypeScript friendly
-- [x] `npm run build` for production
-- [x] `npm start` for development server
-- [x] [GitHub Codespaces](https://docs.github.com/en/codespaces) friendly
+You can set up prebuild to speed up Codespaces creation. The prebuilt image will pre-install all dependencies under `/node_modules/` with initial build.
 
-It is impossible to build an unopinionated scaffold. We try to keep things down to a minimal so you can choose what you want.
+1. [Set up Codespaces prebuilds](../../settings/codespaces/prebuild_configurations/new)
+   1. Check prebuild workflow at [![Codespaces Prebuilds](../../actions/workflows/codespaces/create_codespaces_prebuilds/badge.svg)](../../actions/workflows/codespaces/create_codespaces_prebuilds)
 
-## How to use
-
-To get started, [use this template to create a new repo](https://github.com/compulim/template-react-esbuild/generate).
-
-After you created a new repo, wait awhile and refresh this page for next steps.
+Once the prebuild action is completed, you can create a new prebuilt codespace.
