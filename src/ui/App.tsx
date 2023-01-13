@@ -1,8 +1,14 @@
-import { Icon } from '@fluentui/react';
+import { ActionButton, Icon } from '@fluentui/react';
 import { Fragment, useCallback, useState } from 'react';
+import CustomRenderTextAreaWithSpeech from './CustomRenderTextAreaWithSpeech';
 
 import FluentTextFieldWithSpeech from './FluentTextFieldWithSpeech';
 import TextAreaWithSpeech from './TextAreaWithSpeech';
+
+import type { IIconProps } from '@fluentui/react';
+
+const DICTATING_ICON_PROPS: IIconProps = { iconName: 'CircleStop' };
+const MICROPHONE_ICON_PROPS: IIconProps = { iconName: 'Microphone' };
 
 const App = () => {
   const [value, setValue] = useState('');
@@ -22,6 +28,12 @@ const App = () => {
     [setValue]
   );
 
+  const handleRenderMicrophoneButton = useCallback(
+    ({ dictating, onClick }) => (
+      <ActionButton iconProps={dictating ? DICTATING_ICON_PROPS : MICROPHONE_ICON_PROPS} onClick={onClick} />
+    ),
+    []
+  );
   const handleRenderPrefix = useCallback(() => <Icon iconName="AddFriend" />, []);
 
   return (
@@ -34,6 +46,11 @@ const App = () => {
         value={value}
       />
       <TextAreaWithSpeech onChange={handleHTMLChange} value={value} />
+      <CustomRenderTextAreaWithSpeech
+        onChange={handleHTMLChange}
+        onRenderMicrophoneButton={handleRenderMicrophoneButton}
+        value={value}
+      />
     </Fragment>
   );
 };
