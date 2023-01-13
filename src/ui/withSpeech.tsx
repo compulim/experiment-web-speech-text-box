@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { createElement, useEffect, useRef, useState } from 'react';
 
 import type { ComponentClass, FunctionComponent } from 'react';
 
@@ -10,7 +10,7 @@ type InnerProps = {
 
 type Props = {
   dictating: boolean;
-  onRecognized: (value: string) => void;
+  onRecognized: (event: Event, value: string) => void;
 };
 
 export default function withSpeech<P extends InnerProps>(
@@ -51,8 +51,8 @@ export default function withSpeech<P extends InnerProps>(
 
       speech.addEventListener(
         'end',
-        () => {
-          onRecognizedRef.current?.(interimsRef.current || '');
+        (event: Event) => {
+          onRecognizedRef.current?.(event, interimsRef.current || '');
           setDictateReason('');
         },
         { once: true }
@@ -84,6 +84,6 @@ export default function withSpeech<P extends InnerProps>(
       value: dictating ? interims : props.value
     } as any;
 
-    return React.createElement(componentClass, nextProps);
+    return createElement(componentClass, nextProps);
   };
 }

@@ -7,8 +7,16 @@ import TextAreaWithSpeech from './TextAreaWithSpeech';
 const App = () => {
   const [value, setValue] = useState('');
 
-  const handleChange = useCallback(
+  const handleFluentChange = useCallback(
     (_, value) => {
+      console.log('handleFluentChange', { value });
+      setValue(value);
+    },
+    [setValue]
+  );
+
+  const handleHTMLChange = useCallback(
+    ({ target: { value } }) => {
       setValue(value);
     },
     [setValue]
@@ -21,11 +29,11 @@ const App = () => {
       <h1>Hello, World!</h1>
       <FluentTextFieldWithSpeech
         label="Describe what you would like this topic to do"
-        onChange={handleChange}
+        onChange={handleFluentChange}
         onRenderPrefix={handleRenderPrefix}
         value={value}
       />
-      <TextAreaWithSpeech />
+      <TextAreaWithSpeech onChange={handleHTMLChange} value={value} />
     </Fragment>
   );
 };

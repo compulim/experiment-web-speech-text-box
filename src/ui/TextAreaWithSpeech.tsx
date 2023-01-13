@@ -1,42 +1,30 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 
 import withSpeech from './withSpeech';
-
-import type { ChangeEventHandler } from 'react';
 
 const InternalTextAreaWithSpeech = withSpeech<{
   placeholder?: string;
   readOnly?: boolean;
-  onChange: ChangeEventHandler<HTMLTextAreaElement>;
-  value: string;
 }>('textarea');
 
 const TextAreaWithSpeech = (props: React.TextareaHTMLAttributes<HTMLTextAreaElement>) => {
   const [dictating, setDictating] = useState(false);
-  const [value, setValue] = useState('');
+  const onChangeRef = useRef<typeof props['onChange']>();
 
-  const handleChange = useCallback<ChangeEventHandler<HTMLTextAreaElement>>(
-    ({ target: { value } }) => setValue(value),
-    [setValue]
-  );
+  onChangeRef.current = props.onChange;
+
   const handleMicrophoneClick = useCallback(() => setDictating(dictating => !dictating), [setDictating]);
   const handleRecognized = useCallback(
-    value => {
+    (_: Event, value: string) => {
       setDictating(false);
-      setValue(value);
+      onChangeRef.current?.({ target: { value } } as any);
     },
-    [setDictating, setValue]
+    [onChangeRef, setDictating]
   );
 
   return (
     <div>
-      <InternalTextAreaWithSpeech
-        {...props}
-        dictating={dictating}
-        onChange={handleChange}
-        onRecognized={handleRecognized}
-        value={value}
-      />
+      <InternalTextAreaWithSpeech {...props} dictating={dictating} onRecognized={handleRecognized} />
       <button onClick={handleMicrophoneClick} type="button">
         {dictating ? 'Stop speak' : 'Speak'}
       </button>

@@ -1,5 +1,5 @@
 import { ActionButton, TextField } from '@fluentui/react';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 
 import withSpeech from './withSpeech';
 
@@ -12,16 +12,17 @@ const InternalFluentTextFieldWithSpeech = withSpeech<ITextFieldProps>(TextField)
 
 const FluentTextFieldWithSpeech = (props: ITextFieldProps) => {
   const [dictating, setDictating] = useState(false);
-  const [value, setValue] = useState('');
+  const onChangeRef = useRef<typeof props['onChange']>();
 
-  const handleChange = useCallback((_, value) => setValue(value), [setValue]);
+  onChangeRef.current = props.onChange;
+
   const handleMicrophoneClick = useCallback(() => setDictating(dictating => !dictating), [setDictating]);
   const handleRecognized = useCallback(
-    value => {
+    (event, value) => {
+      onChangeRef.current?.(event, value);
       setDictating(false);
-      setValue(value);
     },
-    [setDictating, setValue]
+    [onChangeRef, setDictating]
   );
 
   const handleRenderSuffix = useCallback(
@@ -35,10 +36,8 @@ const FluentTextFieldWithSpeech = (props: ITextFieldProps) => {
     <InternalFluentTextFieldWithSpeech
       {...props}
       dictating={dictating}
-      onChange={handleChange as any}
       onRecognized={handleRecognized}
       onRenderSuffix={handleRenderSuffix}
-      value={value}
     />
   );
 };
