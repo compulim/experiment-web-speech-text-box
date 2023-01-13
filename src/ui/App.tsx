@@ -1,12 +1,31 @@
-import { Fragment } from 'react';
+import { Icon } from '@fluentui/react';
+import { Fragment, useCallback, useState } from 'react';
 
-import SpeechTextField from './SpeechTextFIeld';
+import FluentTextFieldWithSpeech from './FluentTextFieldWithSpeech';
+import TextAreaWithSpeech from './TextAreaWithSpeech';
 
 const App = () => {
+  const [value, setValue] = useState('');
+
+  const handleChange = useCallback(
+    (_, value) => {
+      setValue(value);
+    },
+    [setValue]
+  );
+
+  const handleRenderPrefix = useCallback(() => <Icon iconName="AddFriend" />, []);
+
   return (
     <Fragment>
       <h1>Hello, World!</h1>
-      <SpeechTextField label="Describe what you would like this topic to do" />
+      <FluentTextFieldWithSpeech
+        label="Describe what you would like this topic to do"
+        onChange={handleChange}
+        onRenderPrefix={handleRenderPrefix}
+        value={value}
+      />
+      <TextAreaWithSpeech />
     </Fragment>
   );
 };
